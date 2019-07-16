@@ -3598,8 +3598,8 @@ cmd_license (int interactive UNUSED, struct cmdarg **args UNUSED)
     }
 
   /* Offset the text so its in the center. */
-  x = s->left + (s->width - max_width) / 2;
-  y = s->top + (s->height - i * FONT_HEIGHT (s)) / 2;
+  x = (s->width - max_width) / 2;
+  y = (s->height - i * FONT_HEIGHT (s)) / 2;
   if (x < 0) x = 0;
   if (y < 0) y = 0;
 
@@ -3716,7 +3716,7 @@ cmd_help (int interactive, struct cmdarg **args)
 
           y += FONT_HEIGHT (s);
           /* Make sure the next line fits entirely within the window. */
-          if (y + FONT_HEIGHT (s) >= (s->top + s->height))
+          if (y + FONT_HEIGHT (s) >= s->height)
             {
               if (drawing_keys)
                 {
@@ -5023,7 +5023,8 @@ sync_wins (void)
               if (frame)
                 {
                   cleanup_frame (frame);
-                  if (frame->number == win->scr->current_frame)
+                  if (frame->number == win->scr->current_frame
+                      && rp_current_screen == win->scr)
                     set_active_frame (frame, 0);
                 }
               withdraw_window (win);
